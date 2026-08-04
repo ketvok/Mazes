@@ -24,3 +24,9 @@ A Python application for generating mazes and finding paths through them.
 - You can open the project in IDE and run gui/app.py
 - Alternatively, open a terminal in the project root folder and run 'py -m gui.app'
 - If needed, you can install the missing packages by running 'py -m pip install -r requirements.txt'
+
+## Main sources
+
+- [Mazes for Programmers](http://www.mazesforprogrammers.com/) by Jamis Buck
+- [Python translation of parts of the book](https://github.com/crux888/mazes-for-programmers-python) by crux888
+- [Pathfinding and algorithms](https://www.redblobgames.com/pathfinding/) by Amit Patel
