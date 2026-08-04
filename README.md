@@ -2,7 +2,7 @@
 A Python application for generating mazes and finding paths through them.
 > **This application is a work in progress.** Features may change, and bugs may exist.
 
-<img width="572" height="432" alt="Image" src="https://github.com/user-attachments/assets/73a682e1-3b89-42ba-8bf8-33238adb2016" />
+<img width="572" height="432" alt="Image" src="https://github.com/user-attachments/assets/18a409a5-3b67-485b-92d5-28a6e6952dc2" />
 <img width="641" height="641" alt="Image" src="https://github.com/user-attachments/assets/8950e599-c664-4058-93d1-c413773374bb" />
 <img width="641" height="641" alt="Image" src="https://github.com/user-attachments/assets/1ae916c4-8e57-440e-a10a-9337df329b1a" />
 <img width="641" height="641" alt="Image" src="https://github.com/user-attachments/assets/9d304134-7ddb-47c3-8f6a-0282b3fad5ff" />
