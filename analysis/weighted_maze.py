@@ -2,6 +2,8 @@
 # For testing cost-aware Dijkstra and A* #
 ##########################################
 
+
+import tkinter as tk
 from algorithms.recursive_backtracker import RecursiveBacktracker
 from algorithms.link_all import LinkAll
 from algorithms.sidewinder import Sidewinder
@@ -88,5 +90,10 @@ finish = grid[19, 19]
 distances = start.astar(finish)
 # grid.set_distances(distances)
 grid.set_distances(distances.path_to(finish))
-grid.to_png()
+
 grid.to_s()
+
+root = tk.Tk()
+
+grid.to_png()
+root.mainloop()

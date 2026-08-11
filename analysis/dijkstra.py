@@ -3,6 +3,7 @@
 #######################
 
 
+import tkinter as tk
 from maze.distance_grid import DistanceGrid
 from algorithms.sidewinder import Sidewinder
 from maze.colored_grid import ColoredGrid
@@ -64,5 +65,8 @@ grid.distances = distances.path_to(grid[grid.rows - 1, grid.columns - 1])
 
 # Draw a maze.
 #-----------------------------------------------------------------------------------------------------------------------
-grid.to_png()
+root = tk.Tk()
+
+grid.to_png(parent=root, title="Dijkstra")
+root.mainloop()
 #-----------------------------------------------------------------------------------------------------------------------

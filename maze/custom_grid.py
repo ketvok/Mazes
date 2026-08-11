@@ -20,10 +20,10 @@ class CustomGrid(Grid):
 
         if self.distances is not None and self.distances[cell] is not None:
             # Manhattan heuristic. Formula: abs(x1 - x2) + abs(y1 - y2). Hardcoded x2 and y2 for testing purposes.
-            return str_base(abs(cell.row - 1) + abs(cell.column - 11), 36)
+            # return str_base(abs(cell.row - 1) + abs(cell.column - 11), 36)  # Hardcoded x2 and y2 for testing purposes.
 
             # Path distance from root.
-            # return str_base(self.distances[cell], 36)
+            return str_base(self.distances[cell], 36)
         else:
             return super().contents_of(cell)
 

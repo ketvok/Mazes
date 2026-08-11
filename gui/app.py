@@ -25,6 +25,7 @@ class App(tk.Tk):
             "rows": "20",
             "columns": "20"
         }
+        self.search_algorithm_name = None
 
         # Window settings
         self.title("Mazes")
@@ -40,7 +41,7 @@ class App(tk.Tk):
         # Font setup
         font_size = 14
         my_font = tk_font.Font(family="Helvetica", size=font_size)
-        self.option_add("*TCombobox*Listbox*Font", my_font)  # Apply the font to all comboboxes and listboxes.
+        self.option_add("*TCombobox*Listbox*Font", my_font)  # Apply the font to all combo boxes and list boxes.
 
         # Maze Algorithm
         self.lbl_maze = tk.Label(self, text="Maze Algorithm:", font=my_font, pady=10)
@@ -51,7 +52,7 @@ class App(tk.Tk):
             "Binary Tree",
             "Sidewinder",
             "Aldous Broder",
-            "Wilsons",
+            "Wilson's",
             "Hunt and Kill",
             "Recursive Backtracker"
         ]
@@ -124,7 +125,7 @@ class App(tk.Tk):
 
         self.var_search = tk.StringVar(self)
         self.search_items = [
-            "A*",
+            "A-star",
             "Dijkstra"
         ]
         self.search = ttk.Combobox(self, state="readonly", textvariable=self.var_search, values=self.search_items, font=my_font)
@@ -327,15 +328,16 @@ class App(tk.Tk):
         rows = int(self.ent_rows.get())
         columns = int(self.ent_columns.get())
         self.grid = CustomGrid(rows, columns)  # Create a grid with the specified dimensions.
-        maze_algorithm = self.var_maze.get()
-        match maze_algorithm:
+        maze_algorithm_name = self.var_maze.get()
+        maze_algorithm = None
+        match maze_algorithm_name:
             case "Binary Tree":
                 maze_algorithm = BinaryTree()
             case "Sidewinder":
                 maze_algorithm = Sidewinder()
             case "Aldous Broder":
                 maze_algorithm = AldousBroder()
-            case "Wilsons":
+            case "Wilson's":
                 maze_algorithm = Wilsons()
             case "Hunt and Kill":
                 maze_algorithm = HuntAndKill()
@@ -343,8 +345,8 @@ class App(tk.Tk):
                 maze_algorithm = RecursiveBacktracker()
             case _:
                 print("Invalid maze algorithm.")
-        maze_algorithm.on(self.grid)  # Apply the maze algorithm to the grid.
-        self.grid.to_png()
+        if maze_algorithm: maze_algorithm.on(self.grid)  # Apply the maze algorithm to the grid.
+        self.grid.to_png(parent=self, title=f"Maze - {maze_algorithm_name}")
         self.btn_search.config(state="normal")
         self.lbl_last_search.config(text="")
 
@@ -357,22 +359,23 @@ class App(tk.Tk):
         start_y = int(self.ent_start_y.get())
         goal_x = int(self.ent_goal_x.get())
         goal_y = int(self.ent_goal_y.get())
-        search_algorithm = self.var_search.get()
+        search_algorithm_name = self.var_search.get()
 
         self.start = self.grid[start_x, start_y]
         self.goal = self.grid[goal_x, goal_y]
 
-        match search_algorithm:
-            case "A*":
+        match search_algorithm_name:
+            case "A-star":
                 self.distances = self.start.astar(self.goal)
                 self.grid.set_distances(self.distances)
             case "Dijkstra":
                 self.distances = self.start.distances2(self.goal)
                 self.grid.set_distances(self.distances)
 
-        self.lbl_last_search.config(text=f"    {search_algorithm}")
-        self.grid.to_png()
+        self.lbl_last_search.config(text=f"    {search_algorithm_name}")
+        self.grid.to_png(parent=self, title=f"Search - {search_algorithm_name}")
         self.btn_path.config(state="normal")
+        self.search_algorithm_name = search_algorithm_name
 
     def find_path(self):
         """
@@ -381,7 +384,7 @@ class App(tk.Tk):
 
         self.distances = self.distances.path_to(self.goal)
         self.grid.set_distances(self.distances)
-        self.grid.to_png()
+        self.grid.to_png(parent=self, title=f"Path - {self.search_algorithm_name}")
 
 
 def main():

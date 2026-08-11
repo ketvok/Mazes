@@ -3,6 +3,7 @@
 #################
 
 
+import tkinter as tk
 from maze.colored_grid import ColoredGrid
 from algorithms.wilsons import Wilsons
 
@@ -16,4 +17,7 @@ grid.distances = start.distances()
 
 grid.braid(0.2)
 
-grid.to_png()
+root = tk.Tk()
+
+grid.to_png(parent=root, title="Coloring")
+root.mainloop()
