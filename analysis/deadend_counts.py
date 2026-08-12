@@ -21,13 +21,13 @@ averages = {}  # Dictionary to store average dead-end counts for each algorithm.
 
 for algorithm in ALGORITHMS:
     print("Running {}...".format(algorithm.__name__))
-    deadend_counts = []  # List to store dead-end counts for each run.
+    dead_end_counts = []  # List to store dead-end counts for each run.
     for _ in range(tries):
         grid = Grid(size, size)
         algorithm().on(grid)
-        deadend_counts.append(len(grid.deadends()))
-    total_dead_ends = sum(deadend_counts)
-    averages[algorithm] = total_dead_ends / len(deadend_counts)
+        dead_end_counts.append(len(grid.dead_ends()))
+    total_dead_ends = sum(dead_end_counts)
+    averages[algorithm] = total_dead_ends / len(dead_end_counts)
 
 total_cells = size * size
 print("Average dead-ends per {}x{} maze ({} cells):".format(size, size, total_cells))

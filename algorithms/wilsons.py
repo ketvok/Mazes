@@ -8,7 +8,7 @@ class Wilsons:
     Slow start, fast finish.
     """
 
-    def on(self, grid:Grid) -> None:
+    def on(self, grid: Grid) -> None:
         unvisited = []
         for cell in grid.each_cell():
             unvisited.append(cell)  # Add all cells to the unvisited list.

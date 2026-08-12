@@ -46,18 +46,18 @@ class Cell(object):
     def neighbors(self) -> list["Cell"]:
         """Return a list of this cell's immediate neighbors."""
 
-        list = []
+        neighbor_cells = []
 
         if self.north:
-            list.append(self.north)
+            neighbor_cells.append(self.north)
         if self.south:
-            list.append(self.south)
+            neighbor_cells.append(self.south)
         if self.east:
-            list.append(self.east)
+            neighbor_cells.append(self.east)
         if self.west:
-            list.append(self.west)
+            neighbor_cells.append(self.west)
 
-        return list
+        return neighbor_cells
         
     def random_neighbour(self) -> "Cell | None":
         """Return a random neighbor of this cell."""

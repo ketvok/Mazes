@@ -10,7 +10,7 @@ class HuntAndKill:
     mazes created by other algorithms.
     """
 
-    def on(self, grid:Grid) -> None:
+    def on(self, grid: Grid) -> None:
         current_cell = grid.random_cell()
         while current_cell is not None:
             unvisited_neighbors = [neighbor for neighbor in current_cell.neighbors() if len(neighbor.links) == 0]

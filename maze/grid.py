@@ -1,12 +1,5 @@
-import os
 import random
-from PIL import Image, ImageDraw, ImageTk
-import tkinter as tk
-from tkinter import filedialog
 from maze.cell import Cell
-
-
-DRAW_BACKGROUND = 0
 
 
 class Grid(object):
@@ -102,135 +95,7 @@ class Grid(object):
 
         return None
 
-    def to_s(self) -> None:
-        """Prints a string representation of the grid."""
-
-        output = "+" + "---+" * self.columns + "\n"  # Initialize output buffer to be the top boundary of the grid.
-        for row in self.each_row():
-            top = "|"  # Bodies and eastern walls for row's cells. Initialize to the western boundary of the row.
-            bottom = "+"  # Southern boundaries for row's cells. Initialize to the row's southwest corner.
-            for cell in row:
-                body = " " + self.contents_of(cell) + " "
-                east_boundary = " " if cell.linked_to(cell.east) else "|"
-                top += body + east_boundary
-                south_boundary = "   " if cell.linked_to(cell.south) else "---"
-                corner = "+"
-                bottom += south_boundary + corner
-            output += top + "\n"
-            output += bottom + "\n"
-        print(output)
-
-    def to_png(self, cell_size: int = 16, parent=None, title: str = "Maze View") -> None:  # Cell size is in pixels.
-        """Generates a PNG image of the grid."""
-
-        # Create a new image:
-        img_width = cell_size * self.columns
-        img_height = cell_size * self.rows
-        background = (220, 220, 220)  # Light gray
-        wall = (0, 0, 0)  # Black
-        img = Image.new("RGBA", (img_width + 1, img_height + 1), background)  # Create a new image.
-        draw = ImageDraw.Draw(img)  # Create an object that can be used to draw in the given image.
-
-        # Paint cells and draw borders:
-        for mode in range(2):  # First pass draws the cell background, second pass draws the walls.
-            for cell in self.each_cell():
-                x1 = cell.column * cell_size
-                y1 = cell.row * cell_size
-                x2 = (cell.column + 1) * cell_size
-                y2 = (cell.row + 1) * cell_size
-
-                if mode == DRAW_BACKGROUND:
-                    color = self.background_color_for(cell)
-                    draw.rectangle((x1, y1, x2, y2), fill = color if color is not None else background)
-                else:
-                    if not cell.north:
-                        draw.line([x1, y1, x2, y1], wall, 1, None)
-                    if not cell.west:
-                        draw.line([x1, y1, x1, y2], wall, 1, None)
-                    if not cell.linked_to(cell.east):
-                        draw.line([x2, y1, x2, y2], wall, 1, None)
-                    if not cell.linked_to(cell.south):
-                        draw.line([x1, y2, x2, y2], wall, 1, None)
-
-        # Create a new window for displaying the image:
-        top = tk.Toplevel(parent)  # Create a new window.
-        top.title(title)  # Set the title of the window.
-        top.geometry("500x500")  # Set the size of the window.
-        top.minsize(500, 500)  # Set the minimum size of the window.
-
-        # Create a canvas to display the image.
-        canvas = tk.Canvas(top, width = img_width, height = img_height)
-        canvas.grid(row=0, column=0)
-
-        # When resizing the window, propagate the extra space to rows and columns:
-        top.grid_rowconfigure(0, weight=1)
-        top.grid_columnconfigure(0, weight=1)
-
-        # Put the image on the canvas:
-        photo_img = ImageTk.PhotoImage(img)  # Convert the image to a Tkinter-compatible format.
-        image_id = canvas.create_image(  # Create an image item on the canvas and store its id.
-            canvas.winfo_width() / 2,
-            canvas.winfo_height() / 2,
-            anchor = tk.CENTER,
-            image = photo_img
-        )
-        canvas.image = photo_img  # N.B.: Keep a reference to the image so it doesn't get garbage collected.
-
-        def resize_image(event):
-            canvas.coords(
-                image_id,
-                event.width / 2,
-                event.height / 2
-            )
-
-            available_width = event.width  # Canvas width.
-            available_height = event.height  # Canvas height.
-
-            image_width, image_height = img.size
-
-            # Preserve the aspect ratio of the image.
-            scale = min(
-                available_width / image_width,
-                available_height / image_height,
-                1.0
-            )
-
-            new_size = (
-                max(cell_size, int(image_width * scale)),
-                max(cell_size, int(image_height * scale))
-            )
-
-            resized_img = img.resize(
-                new_size,
-                Image.Resampling.BOX  # Fast resampling with sharp maze at the same time.
-            )
-
-            # Put the new image to the canvas:
-            new_photo_img = ImageTk.PhotoImage(resized_img)  # Convert the image to a Tkinter-compatible format.
-            canvas.itemconfig(image_id, image = new_photo_img)  # Tell the canvas to change the image to the new one.
-            canvas.image = new_photo_img  # N.B.: Keep a reference to the new image so it doesn't get garbage collected.
-
-        canvas.bind("<Configure>", resize_image)
-
-        def image_save(title: str = title) -> None:
-            """Saves the image to a file."""
-
-            save_path = filedialog.asksaveasfilename(
-                initialfile = title,
-                defaultextension=".png",
-                filetypes=[("PNG files", "*.png")]
-            )
-            if save_path:
-                img.save(save_path)
-
-        # Menu bar:
-        menubar = tk.Menu(top)  # Create a menu bar.
-        filemenu = tk.Menu(menubar, tearoff = 0)  # Create a menu for file operations.
-        filemenu.add_command(label = "Save As...", command = lambda: image_save(title = title))  # Add save image command.
-        menubar.add_cascade(label = "File", menu = filemenu)  # Add the file menu to the menu bar.
-        top.config(menu = menubar)  # Add the menu bar to the window.
-
-    def deadends(self) -> list[Cell]:
+    def dead_ends(self) -> list[Cell]:
         """Returns a list of dead ends."""
 
         return [cell for cell in self.each_cell() if len(cell.links) == 1]
@@ -243,10 +108,10 @@ class Grid(object):
         every cell in the grid.
         """
 
-        deadends = self.deadends()
-        random.shuffle(deadends)
+        dead_ends = self.dead_ends()
+        random.shuffle(dead_ends)
 
-        for cell in deadends:
+        for cell in dead_ends:
             # Check to see that it's still a dead end (as an earlier iteration of the loop may have already linked it to
             # a neighboring dead end)
             if (len(cell.links) != 1 or  # If it's not a dead end (i.e., it's linked to more than one cell),

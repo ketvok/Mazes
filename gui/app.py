@@ -2,6 +2,8 @@ import tkinter as tk
 import tkinter.ttk as ttk
 import tkinter.font as tk_font
 from maze.custom_grid import CustomGrid
+from maze.maze_renderer import MazeRenderer
+from gui.maze_window import MazeWindow
 from algorithms.binary_tree import BinaryTree
 from algorithms.sidewinder import Sidewinder
 from algorithms.aldous_broder import AldousBroder
@@ -12,11 +14,13 @@ from algorithms.recursive_backtracker import RecursiveBacktracker
 
 class App(tk.Tk):
     """
-    This class represents the main application window for a maze generator and pathfinder tool.
+    This class represents the main application window for a maze generator and
+    pathfinder tool.
     """
 
     def __init__(self):
         super().__init__()
+        self.renderer = MazeRenderer()
         self.grid = None
         self.distances = None
         self.start = None
@@ -162,7 +166,7 @@ class App(tk.Tk):
     #                           Validation Methods                           #
     ##########################################################################
 
-    def validate_rows_columns(self, wanted_value):
+    def validate_rows_columns(self, wanted_value) -> bool:
         """
         Validation for the rows and columns fields.
 
@@ -183,10 +187,8 @@ class App(tk.Tk):
 
         return 1 <= int(wanted_value) <= 100
 
-    def validate_start_x(self, wanted_value):
-        """
-        Validation for the start x field.
-        """
+    def validate_start_x(self, wanted_value) -> bool:
+        """Validation for the start x field."""
 
         # Allow the user to temporarily empty the field with backspace
         if wanted_value == "":
@@ -203,10 +205,8 @@ class App(tk.Tk):
 
         return 0 <= int(wanted_value) <= int(self.ent_rows.get()) - 1
 
-    def validate_start_y(self, wanted_value):
-        """
-        Validation for the start y field.
-        """
+    def validate_start_y(self, wanted_value) -> bool:
+        """Validation for the start y field."""
 
         # Allow the user to temporarily empty the field with backspace
         if wanted_value == "":
@@ -221,12 +221,10 @@ class App(tk.Tk):
             if wanted_value.startswith("0"):
                 return False
 
-        return 0 <= int(wanted_value) <= int(self.ent_columns.get()) - 1
+        return 0 <= int(wanted_value) <= int(self.ent_columns.get())-1
 
-    def validate_goal_x(self, wanted_value):
-        """
-        Validation for the goal x field.
-        """
+    def validate_goal_x(self, wanted_value) -> bool:
+        """Validation for the goal x field."""
 
         # Allow the user to temporarily empty the field with backspace
         if wanted_value == "":
@@ -241,12 +239,10 @@ class App(tk.Tk):
             if wanted_value.startswith("0"):
                 return False
 
-        return 0 <= int(wanted_value) <= int(self.ent_rows.get()) - 1
+        return 0 <= int(wanted_value) <= int(self.ent_rows.get())-1
 
-    def validate_goal_y(self, wanted_value):
-        """
-        Validation for the goal y field.
-        """
+    def validate_goal_y(self, wanted_value) -> bool:
+        """Validation for the goal y field."""
 
         # Allow the user to temporarily empty the field with backspace
         if wanted_value == "":
@@ -261,12 +257,10 @@ class App(tk.Tk):
             if wanted_value.startswith("0"):
                 return False
 
-        return 0 <= int(wanted_value) <= int(self.ent_columns.get()) - 1
+        return 0 <= int(wanted_value) <= int(self.ent_columns.get())-1
 
-    def set_safe_defaults(self, event):
-        """
-        Upon focus loss, compare values from different entries and set safe defaults if necessary.
-        """
+    def set_safe_defaults(self, event) -> None:
+        """Upon focus loss, compare values from different entries and set safe defaults if necessary."""
 
         if self.ent_start_x.get() == "":
             self.ent_start_x.insert(0, "0")
@@ -304,32 +298,43 @@ class App(tk.Tk):
                 self.ent_start_y.delete(0, "end")
                 self.ent_start_y.insert(0, str(columns - 1))
 
-    def maze_config_changed(self, event):
+    def maze_config_changed(self, event) -> None:
         self.btn_search.config(state="disabled")
         self.btn_path.config(state="disabled")
         self.lbl_last_search.config(text="")
 
-    def start_goal_changed(self, event):
+    def start_goal_changed(self, event) -> None:
         self.btn_path.config(state="disabled")
 
-    def search_algorithm_changed(self, event):
+    def search_algorithm_changed(self, event) -> None:
         self.btn_path.config(state="disabled")
+
+
+    ##########################################################################
+    #                             Helper Methods                             #
+    ##########################################################################
+
+    def show_grid(self, title) -> None:
+        """Shows the grid on the screen."""
+
+        image = self.renderer.render(self.grid)
+        MazeWindow(parent=self, image=image, title=title)
 
 
     ##########################################################################
     #                      Maze Creation and Search Methods                  #
     ##########################################################################
 
-    def generate_maze(self):
-        """
-        Generates a maze using the specified maze algorithm and visualizes it.
-        """
+    def generate_maze(self) -> None:
+        """Generates a maze using the specified maze algorithm and visualizes it."""
 
         rows = int(self.ent_rows.get())
         columns = int(self.ent_columns.get())
         self.grid = CustomGrid(rows, columns)  # Create a grid with the specified dimensions.
+
         maze_algorithm_name = self.var_maze.get()
         maze_algorithm = None
+
         match maze_algorithm_name:
             case "Binary Tree":
                 maze_algorithm = BinaryTree()
@@ -345,15 +350,17 @@ class App(tk.Tk):
                 maze_algorithm = RecursiveBacktracker()
             case _:
                 print("Invalid maze algorithm.")
-        if maze_algorithm: maze_algorithm.on(self.grid)  # Apply the maze algorithm to the grid.
-        self.grid.to_png(parent=self, title=f"Maze - {maze_algorithm_name}")
+
+        # Apply the maze algorithm to the grid:
+        if maze_algorithm:
+            maze_algorithm.on(self.grid)
+
+        self.show_grid(title=f"Maze - {maze_algorithm_name}")
         self.btn_search.config(state="normal")
         self.lbl_last_search.config(text="")
 
-    def run_search(self):
-        """
-        Applies the specified search algorithm to the maze and visualizes it.
-        """
+    def run_search(self) -> None:
+        """Applies the specified search algorithm to the maze and visualizes it."""
 
         start_x = int(self.ent_start_x.get())
         start_y = int(self.ent_start_y.get())
@@ -373,18 +380,16 @@ class App(tk.Tk):
                 self.grid.set_distances(self.distances)
 
         self.lbl_last_search.config(text=f"    {search_algorithm_name}")
-        self.grid.to_png(parent=self, title=f"Search - {search_algorithm_name}")
+        self.show_grid(title=f"Search - {search_algorithm_name}")
         self.btn_path.config(state="normal")
         self.search_algorithm_name = search_algorithm_name
 
-    def find_path(self):
-        """
-        Reconstructs the shortest path from the goal to the start and visualizes it.
-        """
+    def find_path(self) -> None:
+        """Reconstructs the shortest path from the goal to the start and visualizes it."""
 
         self.distances = self.distances.path_to(self.goal)
         self.grid.set_distances(self.distances)
-        self.grid.to_png(parent=self, title=f"Path - {self.search_algorithm_name}")
+        self.show_grid(title=f"Path - {self.search_algorithm_name}")
 
 
 def main():

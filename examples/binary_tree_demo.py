@@ -1,7 +1,9 @@
 import tkinter as tk
 from maze.grid import Grid
+from maze.maze_renderer import MazeRenderer
+from gui.maze_window import MazeWindow
 from algorithms.binary_tree import BinaryTree
-
+from maze.text_renderer import TextRenderer
 
 grid = Grid(20, 20)
 algorithm = BinaryTree()
@@ -9,8 +11,11 @@ algorithm.on(grid)
 
 grid.braid(0.2)  # Optional.
 
-# grid.to_s()
-root = tk.Tk()
+renderer = TextRenderer()
+print(renderer.render(grid))
 
-grid.to_png(parent=root, title="Maze - Binary Tree")
+root = tk.Tk()
+renderer = MazeRenderer()
+image = renderer.render(grid)
+window = MazeWindow(root, image, title="Binary Tree Demo")
 root.mainloop()

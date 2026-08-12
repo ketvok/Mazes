@@ -5,13 +5,13 @@
 
 
 from maze.distance_grid import DistanceGrid
+from maze.text_renderer import TextRenderer
 from algorithms.binary_tree import BinaryTree
 
 
 grid = DistanceGrid(8, 8)
 algorithm = BinaryTree()
 algorithm.on(grid)
-# grid.to_s()
 
 # 1. Choose a starting cell.
 start = grid[0, 0]
@@ -26,7 +26,8 @@ goal, distance = new_distances.max()  # Return the cell with the maximum distanc
 
 # 4. Print the path from the starting cell to the goal cell.
 grid.distances = new_distances.path_to(goal)
-grid.to_s()
+renderer = TextRenderer()
+print(renderer.render(grid))
 
 # Note:
 # This is technically the longest path. There may be multiple paths through the maze that are all equally long,

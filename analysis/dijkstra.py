@@ -5,8 +5,11 @@
 
 import tkinter as tk
 from maze.distance_grid import DistanceGrid
-from algorithms.sidewinder import Sidewinder
 from maze.colored_grid import ColoredGrid
+from maze.text_renderer import TextRenderer
+from maze.maze_renderer import MazeRenderer
+from gui.maze_window import MazeWindow
+from algorithms.sidewinder import Sidewinder
 from algorithms.recursive_backtracker import RecursiveBacktracker
 
 
@@ -33,7 +36,8 @@ grid.distances = distances.path_to(grid[grid.rows - 1, grid.columns - 1])
 
 # Draw a maze with distance to the goal.
 #-----------------------------------------------------------------------------------------------------------------------
-grid.to_s()
+renderer = TextRenderer()
+print(renderer.render(grid))
 #-----------------------------------------------------------------------------------------------------------------------
 
 
@@ -66,7 +70,8 @@ grid.distances = distances.path_to(grid[grid.rows - 1, grid.columns - 1])
 # Draw a maze.
 #-----------------------------------------------------------------------------------------------------------------------
 root = tk.Tk()
-
-grid.to_png(parent=root, title="Dijkstra")
+renderer = MazeRenderer()
+image = renderer.render(grid)
+window = MazeWindow(root, image, title="Dijkstra")
 root.mainloop()
 #-----------------------------------------------------------------------------------------------------------------------
