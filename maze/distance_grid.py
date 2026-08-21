@@ -28,7 +28,7 @@ class DistanceGrid(Grid):
 # Additional code to format cell distance as base 36
 # (from https://stackoverflow.com/questions/2063425):
 
-def str_base(number, base):
+def str_base(number, base) -> str:
     if number < 0:
         return '-' + str_base(-number, base)
     else:
@@ -39,7 +39,7 @@ def str_base(number, base):
             return digit_to_char(m)
 
 
-def digit_to_char(digit):
+def digit_to_char(digit) -> str:
     if digit < 10:
         return chr(ord('0') + digit)
     else:

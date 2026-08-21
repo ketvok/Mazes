@@ -2,9 +2,7 @@ from PIL import Image, ImageDraw
 
 
 class MazeRenderer:
-    """
-    Renders a grid-based maze as an image.
-    """
+    """Renders a grid-based maze as an image."""
 
     def __init__(self, cell_size: int = 16):
         self.cell_size = cell_size

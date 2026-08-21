@@ -22,7 +22,7 @@ class ColoredGrid(Grid):
                 return 255, 255, 255
             distance = self.distances[cell]  # Get distance for a given cell.
 
-            # Calculate RGB intensity based on distance
+            # Calculate RGB intensity based on distance:
             intensity = float((self.maximum - distance)) / self.maximum  # 0 to 1; distance of 0 means intensity 1.
             dark = round(255 * intensity)  # This component of RGB is darker.
             bright = 128 + round(127 * intensity)  # This component of RGB is brighter.

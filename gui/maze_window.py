@@ -12,7 +12,7 @@ class MazeWindow:
     """
 
     def __init__(self, parent, image, title: str = "Maze View"):
-        # Keep the original Pillow image. We use it again whenever the window changes size
+        # Keep the original Pillow image. It is used again whenever the window changes size
         # and when the user saves the image.
         self.image = image
 
@@ -67,7 +67,6 @@ class MazeWindow:
             max(1, int(image_width * scale)),
             max(1, int(image_height * scale))
         )
-
 
         # Make a resized copy of the original image.
         # BOX resampling proved to be fast and produce sharp-looking images at the same

@@ -173,11 +173,11 @@ class App(tk.Tk):
         Allowed values: 1-100, ASCII digits greater than or equal to 1, no leading zeros.
         """
 
-        # Allow the user to temporarily empty the field with backspace
+        # Allow the user to temporarily empty the field with backspace.
         if wanted_value == "":
             return True
 
-        # Only allow ascii digits
+        # Only allow ascii digits.
         if not wanted_value.isascii() or not wanted_value.isdigit():
             return False
 
@@ -190,11 +190,11 @@ class App(tk.Tk):
     def validate_start_x(self, wanted_value) -> bool:
         """Validation for the start x field."""
 
-        # Allow the user to temporarily empty the field with backspace
+        # Allow the user to temporarily empty the field with backspace.
         if wanted_value == "":
             return True
 
-        # Only allow ascii digits
+        # Only allow ascii digits.
         if not wanted_value.isascii() or not wanted_value.isdigit():
             return False
 
@@ -208,11 +208,11 @@ class App(tk.Tk):
     def validate_start_y(self, wanted_value) -> bool:
         """Validation for the start y field."""
 
-        # Allow the user to temporarily empty the field with backspace
+        # Allow the user to temporarily empty the field with backspace.
         if wanted_value == "":
             return True
 
-        # Only allow ascii digits
+        # Only allow ascii digits.
         if not wanted_value.isascii() or not wanted_value.isdigit():
             return False
 
@@ -226,11 +226,11 @@ class App(tk.Tk):
     def validate_goal_x(self, wanted_value) -> bool:
         """Validation for the goal x field."""
 
-        # Allow the user to temporarily empty the field with backspace
+        # Allow the user to temporarily empty the field with backspace.
         if wanted_value == "":
             return True
 
-        # Only allow ascii digits
+        # Only allow ascii digits.
         if not wanted_value.isascii() or not wanted_value.isdigit():
             return False
 
@@ -244,11 +244,11 @@ class App(tk.Tk):
     def validate_goal_y(self, wanted_value) -> bool:
         """Validation for the goal y field."""
 
-        # Allow the user to temporarily empty the field with backspace
+        # Allow the user to temporarily empty the field with backspace.
         if wanted_value == "":
             return True
 
-        # Only allow ascii digits
+        # Only allow ascii digits.
         if not wanted_value.isascii() or not wanted_value.isdigit():
             return False
 
