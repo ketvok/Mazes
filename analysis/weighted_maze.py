@@ -4,15 +4,17 @@
 
 
 import tkinter as tk
-from algorithms.recursive_backtracker import RecursiveBacktracker
-from algorithms.link_all import LinkAll
-from algorithms.sidewinder import Sidewinder
+from maze.grid import Grid
+from maze_generation.recursive_backtracker import RecursiveBacktracker
+from maze_generation.link_all import LinkAll
+from maze_generation.sidewinder import Sidewinder
 from gui.maze_window import MazeWindow
-from maze.custom_grid import CustomGrid
 from maze.maze_renderer import MazeRenderer
 from maze.text_renderer import TextRenderer
+from pathfinding.dijkstra import dijkstra
+from pathfinding.astar import astar
 
-grid = CustomGrid(20, 20)
+grid = Grid(20, 20)
 algorithm = LinkAll()
 algorithm.on(grid)
 
@@ -46,32 +48,32 @@ for row in range(3, 12):
 
 root = tk.Tk()
 
-# Dijkstra:
-distances = start.distances(finish)
-grid.set_distances(distances)
-# grid.set_distances(distances.path_to(finish))
-renderer = MazeRenderer()
-image = renderer.render(grid)
-window = MazeWindow(root, image, title="distances")
-# ASCII:
-renderer = TextRenderer()
-print("distances")
-print(renderer.render(grid))
+# # Dijkstra:
+# distances = dijkstra(start, finish)
+# grid.set_distances(distances)
+# # grid.set_distances(distances.path_to(finish))
+# renderer = MazeRenderer()
+# image = renderer.render(grid)
+# window = MazeWindow(root, image, title="distances")
+# # ASCII:
+# renderer = TextRenderer()
+# print("distances")
+# print(renderer.render(grid))
 
 # Dijkstra - priority queue:
-distances = start.distances2(finish)
+distances = dijkstra(start, finish)
 grid.set_distances(distances)
 # # grid.set_distances(distances.path_to(finish))
 renderer = MazeRenderer()
 image = renderer.render(grid)
-window = MazeWindow(root, image, title="distances2")
+window = MazeWindow(root, image, title="dijkstra")
 # ASCII:
 renderer = TextRenderer()
-print("distances2")
+print("dijkstra")
 print(renderer.render(grid))
 
 # A-star:
-distances = start.astar(finish)
+distances = astar(start, finish)
 grid.set_distances(distances)
 # grid.set_distances(distances.path_to(finish))
 renderer = MazeRenderer()

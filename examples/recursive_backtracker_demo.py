@@ -2,7 +2,7 @@ import tkinter as tk
 from maze.grid import Grid
 from maze.maze_renderer import MazeRenderer
 from gui.maze_window import MazeWindow
-from algorithms.recursive_backtracker import RecursiveBacktracker
+from maze_generation.recursive_backtracker import RecursiveBacktracker
 from maze.text_renderer import TextRenderer
 
 grid = Grid(20, 20)

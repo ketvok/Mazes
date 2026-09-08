@@ -13,6 +13,7 @@ class Cell(object):
         self.south = None
         self.east = None
         self.west = None
+        self.weight = 1  # Default movement cost to this cell.
 
     def link(self, cell, bidi = True) -> "Cell":
         """Link the given cell to this cell."""
@@ -66,22 +67,3 @@ class Cell(object):
             return None
         else:
             return choice(self.neighbors())
-
-    def distances(self) -> "Distances":
-        """Compute unweighted shortest paths using simplified Dijkstra's algorithm."""
-
-        weights = Distances(self)  # Shortest distances to the start node. Starts with self as start (distance 0).
-        frontier = [self]  # Start with self as the only cell in the frontier.
-
-        while frontier:
-            new_frontier = []
-
-            for cell in frontier:
-                for linked_cell in cell.links:
-                    if weights[linked_cell] is None and weights[cell] is not None:
-                        weights[linked_cell] = weights[cell] + 1
-                        new_frontier.append(linked_cell)
-
-            frontier = new_frontier  # Update the frontier. If new_frontier is empty, the loop will terminate.
-
-        return weights

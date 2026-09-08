@@ -4,12 +4,13 @@
 ################################################
 
 
-from maze.distance_grid import DistanceGrid
+from maze.grid import Grid
 from maze.text_renderer import TextRenderer
-from algorithms.binary_tree import BinaryTree
+from maze_generation.binary_tree import BinaryTree
+from pathfinding.dijkstra import dijkstra
 
 
-grid = DistanceGrid(8, 8)
+grid = Grid(8, 8)
 algorithm = BinaryTree()
 algorithm.on(grid)
 
@@ -17,11 +18,11 @@ algorithm.on(grid)
 start = grid[0, 0]
 
 # 2. Find the cell with the maximum distance from the starting cell.
-distances = start.distances()  # Dijkstra: find distances from start to every other cell.
+distances = dijkstra(start)  # Store distances from start to every other reachable cell.
 new_start, distance = distances.max()  # Return the cell with the maximum distance.
 
 # 3. Repeat step 2 with the cell that had maximum distance from the starting cell as the new starting cell.
-new_distances = new_start.distances()  # Dijkstra: find distances from new_start to every other cell.
+new_distances = dijkstra(new_start)  # Store distances from new_start to every other reachable cell.
 goal, distance = new_distances.max()  # Return the cell with the maximum distance.
 
 # 4. Print the path from the starting cell to the goal cell.

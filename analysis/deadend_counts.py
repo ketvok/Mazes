@@ -4,12 +4,12 @@
 
 
 from maze.grid import Grid
-from algorithms.binary_tree import BinaryTree
-from algorithms.sidewinder import Sidewinder
-from algorithms.aldous_broder import AldousBroder
-from algorithms.wilsons import Wilsons
-from algorithms.hunt_and_kill import HuntAndKill
-from algorithms.recursive_backtracker import RecursiveBacktracker
+from maze_generation.binary_tree import BinaryTree
+from maze_generation.sidewinder import Sidewinder
+from maze_generation.aldous_broder import AldousBroder
+from maze_generation.wilsons import Wilsons
+from maze_generation.hunt_and_kill import HuntAndKill
+from maze_generation.recursive_backtracker import RecursiveBacktracker
 
 
 ALGORITHMS = [BinaryTree, Sidewinder, AldousBroder, Wilsons, HuntAndKill, RecursiveBacktracker]

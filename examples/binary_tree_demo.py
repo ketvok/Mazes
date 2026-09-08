@@ -2,7 +2,7 @@ import tkinter as tk
 from maze.grid import Grid
 from maze.maze_renderer import MazeRenderer
 from gui.maze_window import MazeWindow
-from algorithms.binary_tree import BinaryTree
+from maze_generation.binary_tree import BinaryTree
 from maze.text_renderer import TextRenderer
 
 grid = Grid(20, 20)

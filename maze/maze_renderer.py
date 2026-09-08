@@ -25,7 +25,7 @@ class MazeRenderer:
         wall = (0, 0, 0)
 
         image = Image.new(
-            "RGBA",
+            "RGB",
             (width + 1, height + 1),
             background
         )

@@ -1,15 +1,17 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 import tkinter.font as tk_font
-from maze.custom_grid import CustomGrid
+from maze.grid import Grid
 from maze.maze_renderer import MazeRenderer
 from gui.maze_window import MazeWindow
-from algorithms.binary_tree import BinaryTree
-from algorithms.sidewinder import Sidewinder
-from algorithms.aldous_broder import AldousBroder
-from algorithms.wilsons import Wilsons
-from algorithms.hunt_and_kill import HuntAndKill
-from algorithms.recursive_backtracker import RecursiveBacktracker
+from maze_generation.binary_tree import BinaryTree
+from maze_generation.sidewinder import Sidewinder
+from maze_generation.aldous_broder import AldousBroder
+from maze_generation.wilsons import Wilsons
+from maze_generation.hunt_and_kill import HuntAndKill
+from maze_generation.recursive_backtracker import RecursiveBacktracker
+from pathfinding.dijkstra import dijkstra
+from pathfinding.astar import astar
 
 
 class App(tk.Tk):
@@ -330,7 +332,7 @@ class App(tk.Tk):
 
         rows = int(self.ent_rows.get())
         columns = int(self.ent_columns.get())
-        self.grid = CustomGrid(rows, columns)  # Create a grid with the specified dimensions.
+        self.grid = Grid(rows, columns)  # Create a grid with the specified dimensions.
 
         maze_algorithm_name = self.var_maze.get()
         maze_algorithm = None
@@ -373,10 +375,10 @@ class App(tk.Tk):
 
         match search_algorithm_name:
             case "A-star":
-                self.distances = self.start.astar(self.goal)
+                self.distances = astar(self.start, self.goal)
                 self.grid.set_distances(self.distances)
             case "Dijkstra":
-                self.distances = self.start.distances2(self.goal)
+                self.distances = dijkstra(self.start, self.goal)
                 self.grid.set_distances(self.distances)
 
         self.lbl_last_search.config(text=f"    {search_algorithm_name}")

@@ -8,6 +8,8 @@ class Grid(object):
         self.columns = columns  # number of columns
         self.grid = self.prepare_grid()
         self.configure_cells()
+        self.distances = None
+        self.maximum = 0  # Furthest distance
 
     def prepare_grid(self) -> list[list[Cell]]:
         """Sets up a simple two-dimensional array of Cell instances."""
@@ -85,15 +87,30 @@ class Grid(object):
 
         return self.grid[row][column]
 
-    def contents_of(self, cell) -> str:
-        """Returns a string representation of the contents of the given cell."""
+    def background_color_for(self, cell) -> tuple[int, int, int] | None:
+        """Returns the background color for a cell."""
 
-        return " "
+        if self.distances is not None and self.distances[cell] is not None:
+            if self.maximum == 0:
+                farthest, self.maximum = self.distances.max()  # Get farthest cell and it's distance.
+            if self.maximum == 0:  # Zero division protection in case of a grid with a single cell.
+                return 255, 255, 255
+            distance = self.distances[cell]  # Get distance for a given cell.
 
-    def background_color_for(self, cell):
-        """Returns a background color for the given cell."""
+            # Calculate RGB intensity based on distance
+            intensity = float((self.maximum - distance)) / self.maximum  # 0 to 1; distance of 0 means intensity 1.
+            dark = round(255 * intensity)  # This component of RGB is darker.
+            bright = 128 + round(127 * intensity)  # This component of RGB is brighter.
 
-        return None
+            # return dark, bright, dark      # green
+            # return dark, dark, bright      # blue
+            # return bright, dark, bright    # purple
+            # return bright, bright, dark    # greenish
+            # return dark, bright, bright    # teal
+            return bright, dark, dark       # red
+            # return bright, bright, bright  # gray
+        else:
+            return None
 
     def dead_ends(self) -> list[Cell]:
         """Returns a list of dead ends."""
@@ -129,3 +146,55 @@ class Grid(object):
             if best:
                 neighbor = random.choice(best)  # Pick a random neighbor.
                 cell.link(neighbor)  # Braid it!
+
+    def set_distances(self, distances) -> None:
+        """Stores distances and the maximum distance."""
+
+        self.distances = distances
+        farthest, self.maximum = distances.max()
+
+    def contents_of(self, cell):
+        """
+        Returns the distance of a cell as one of the following:
+        0, 1, 2, 3, 4, 5, 6, 7, 8, 9, a, b, c, d, e, f, g, h, i, j, k, l,
+        m, n, o, p, q, r, s, t, u, v, w, x, y, z.
+
+        Returns the distance of a cell or manhattan distance,
+        depending on which part of the code is commented.
+
+        For testing purposes.
+        """
+
+        if self.distances is not None and self.distances[cell] is not None:
+            # Manhattan heuristic. Formula: abs(x1 - x2) + abs(y1 - y2). Hardcoded x2 and y2 for testing purposes.
+            # return str_base(abs(cell.row - 1) + abs(cell.column - 11), 36)
+
+            # Path distance from root.
+            return str_base(self.distances[cell], 36)
+        else:
+            return " "
+
+
+# Because we’re limited to one ASCII character for the body of the
+# cell, we format the distance as a base-36 integer.
+# This lets us represent distances up to 35 using a single character.
+
+# Additional code to format cell distance as base 36
+# (from https://stackoverflow.com/questions/2063425):
+
+def str_base(number, base) -> str:
+    if number < 0:
+        return '-' + str_base(-number, base)
+    else:
+        (d, m) = divmod(number, base)
+        if d:
+            return str_base(d, base) + digit_to_char(m)
+        else:
+            return digit_to_char(m)
+
+
+def digit_to_char(digit) -> str:
+    if digit < 10:
+        return chr(ord('0') + digit)
+    else:
+        return chr(ord('a') + digit - 10)
