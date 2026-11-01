@@ -4,13 +4,7 @@ import tkinter.font as tk_font
 from maze.grid import Grid
 from maze.maze_renderer import MazeRenderer
 from gui.maze_window import MazeWindow
-from maze_generation.binary_tree import BinaryTree
-from maze_generation.sidewinder import Sidewinder
-from maze_generation.aldous_broder import AldousBroder
-from maze_generation.wilsons import Wilsons
-from maze_generation.hunt_and_kill import HuntAndKill
 from maze_generation.recursive_backtracker import RecursiveBacktracker
-from pathfinding.dijkstra import dijkstra
 from pathfinding.astar import astar
 
 
@@ -55,11 +49,7 @@ class App(tk.Tk):
 
         self.var_maze = tk.StringVar(self)
         self.maze_items = [
-            "Binary Tree",
-            "Sidewinder",
-            "Aldous Broder",
-            "Wilson's",
-            "Hunt and Kill",
+            # Add additional maze algorithms here.
             "Recursive Backtracker"
         ]
         self.maze = ttk.Combobox(self, state="readonly", textvariable=self.var_maze, values=self.maze_items, font=my_font)
@@ -132,7 +122,7 @@ class App(tk.Tk):
         self.var_search = tk.StringVar(self)
         self.search_items = [
             "A-star",
-            "Dijkstra"
+            # Add additional search algorithms here.
         ]
         self.search = ttk.Combobox(self, state="readonly", textvariable=self.var_search, values=self.search_items, font=my_font)
         self.var_search.set(self.search_items[0])  # Default value.
@@ -159,9 +149,9 @@ class App(tk.Tk):
         self.btn_path = tk.Button(self.frm_buttons, text="Path", command=self.find_path, font=my_font, state="disabled")
         self.btn_path.grid(column=2, row=0, sticky="nsew")
 
-        # Last Search Label
-        self.lbl_last_search = tk.Label(self.frm_buttons, font=my_font, anchor="w", text="", width=20)
-        self.lbl_last_search.grid(column=3, row=0)
+        # Last Search Label  # Uncomment to display the last search algorithm used.
+        # self.lbl_last_search = tk.Label(self.frm_buttons, font=my_font, anchor="w", text="", width=20)
+        # self.lbl_last_search.grid(column=3, row=0)
 
 
     ##########################################################################
@@ -303,7 +293,7 @@ class App(tk.Tk):
     def maze_config_changed(self, event) -> None:
         self.btn_search.config(state="disabled")
         self.btn_path.config(state="disabled")
-        self.lbl_last_search.config(text="")
+        # self.lbl_last_search.config(text="")  # Uncomment to display the last maze algorithm used.
 
     def start_goal_changed(self, event) -> None:
         self.btn_path.config(state="disabled")
@@ -338,16 +328,7 @@ class App(tk.Tk):
         maze_algorithm = None
 
         match maze_algorithm_name:
-            case "Binary Tree":
-                maze_algorithm = BinaryTree()
-            case "Sidewinder":
-                maze_algorithm = Sidewinder()
-            case "Aldous Broder":
-                maze_algorithm = AldousBroder()
-            case "Wilson's":
-                maze_algorithm = Wilsons()
-            case "Hunt and Kill":
-                maze_algorithm = HuntAndKill()
+            # Add additional maze algorithms here.
             case "Recursive Backtracker":
                 maze_algorithm = RecursiveBacktracker()
             case _:
@@ -359,7 +340,7 @@ class App(tk.Tk):
 
         self.show_grid(title=f"Maze - {maze_algorithm_name}")
         self.btn_search.config(state="normal")
-        self.lbl_last_search.config(text="")
+        # self.lbl_last_search.config(text="")  # Uncomment to display the last maze algorithm used.
 
     def run_search(self) -> None:
         """Applies the specified search algorithm to the maze and visualizes it."""
@@ -377,11 +358,9 @@ class App(tk.Tk):
             case "A-star":
                 self.distances = astar(self.start, self.goal)
                 self.grid.set_distances(self.distances)
-            case "Dijkstra":
-                self.distances = dijkstra(self.start, self.goal)
-                self.grid.set_distances(self.distances)
+            # Add additional search algorithms here.
 
-        self.lbl_last_search.config(text=f"    {search_algorithm_name}")
+        # self.lbl_last_search.config(text=f"    {search_algorithm_name}")  # Uncomment to display the last search algorithm used.
         self.show_grid(title=f"Search - {search_algorithm_name}")
         self.btn_path.config(state="normal")
         self.search_algorithm_name = search_algorithm_name
